@@ -16,18 +16,26 @@ router.get('/',
     var ping = { GUID : GUID,
         text: text,
         updatedAt: db.sequelize.fn('NOW')};
-    Ping.findOrCreate({where :{GUID:GUID},defaults:ping}).
-        spread(function(pingRes,created){
-            if(created){
-               // ping.updatedAt = undefined;
-                res.send(servResponse.success(ping));
-            }else{
-               pingRes.updateAttributes(ping).then(function(){
-                  // ping.updatedAt = undefined;
-                  res.send(servResponse.success(ping));
-               });
-            }
-        });
+        try
+        {
+            Ping.findOrCreate({where :{GUID:GUID},defaults:ping}).
+                spread(function(pingRes,created){
+                    if(created){
+                        // ping.updatedAt = undefined;
+                        res.send(servResponse.success(ping));
+                    }else{
+                        pingRes.updateAttributes(ping).then(function(){
+                            // ping.updatedAt = undefined;
+                            res.send(servResponse.success(ping));
+                        });
+                    }
+                }).catch(function (error) {
+                    res.send(servResponse.success("Ok"));
+                });;
+        }catch (e){
+            res.send(servResponse.error("dberr"));
+        }
+
 });
 router.get('/find',
     validator.find,
