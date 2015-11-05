@@ -9,3 +9,10 @@ module.exports.index = function(req,res,next)
     if(!GUID || !text) return res.send(servResponse.error("empty arguments"));
     next();
 };
+module.exports.find= function(req,res,next)
+{
+    var GUID = req.query.GUID;
+
+    if(!GUID) return res.send(servResponse.error("empty arguments"));
+    next();
+};

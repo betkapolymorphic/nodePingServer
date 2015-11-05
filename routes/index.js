@@ -19,17 +19,25 @@ router.get('/',
     Ping.findOrCreate({where :{GUID:GUID},defaults:ping}).
         spread(function(pingRes,created){
             if(created){
-                ping.updatedAt = undefined;
+               // ping.updatedAt = undefined;
                 res.send(servResponse.success(ping));
             }else{
                pingRes.updateAttributes(ping).then(function(){
-                   ping.updatedAt = undefined;
+                  // ping.updatedAt = undefined;
                   res.send(servResponse.success(ping));
                });
             }
         });
-
-
 });
+router.get('/find',
+    validator.find,
+    function(req,res){
+        var Ping = db.schemes.Ping;
+        Ping.findOne({where:{GUID:req.query.GUID}}).then(function(obj){
+            if(!obj)return res.send(servResponse.error('cant find'));
+            res.send(servResponse.success(obj));
+        });
+
+    });
 
 module.exports = router;

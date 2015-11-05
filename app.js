@@ -23,13 +23,7 @@ app.use(function(req, res, next) {
 });
 
 
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.send({
-    message: err.message,
-    error: {}
-  });
-});
+
 var server = app.listen(3000, function () {
     var host = server.address().address;
     var port = server.address().port;
